@@ -11,7 +11,7 @@ public class UsingSwitchCase {
         int workingHours;
         if (check == 1) {
             workingHours = 16;
-            System.out.println("Employee is Present Full Time");
+            System.out.println("Empgitloyee is Present Full Time");
             int empWage = wagePerHour * workingHours;
             System.out.println(" Employee Wage = " + empWage);
         }
