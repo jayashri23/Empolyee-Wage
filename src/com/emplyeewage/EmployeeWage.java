@@ -15,6 +15,10 @@ public class EmployeeWage {
         EmployeeWage(){
             System.out.println("Welcome to Employee Wage Computation ..!");
         }
+
+    public EmployeeWage(String companyName, int empRatePerHour, int numWorkingDays, int maxHoursPerMonth) {
+    }
+
     public static int computeEmpWage(){
             int empHours =0;
             int totalWorkingHours = 0;

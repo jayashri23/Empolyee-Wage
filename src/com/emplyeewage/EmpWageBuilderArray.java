@@ -1,60 +1,64 @@
 package com.emplyeewage;
 
-public class EmpWageBuilderArray {
-    public static  final int isPartTime = 1;
-    public static  final int isFullTime= 2;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-    private int numOfCompany=0;
-    private EmployeeComputation[]  companyEmpWageArray;
-    public EmpWageBuilderArray(){
-        companyEmpWageArray= new EmployeeComputation[5];
+public class EmpWageBuilderArray  implements  EmployeeWage {
+
+    static final int isPartTime = 1;
+    static final int isFullTime = 2;
+    private int numOfCompany = 0;
+    private List<EmployeeWage> companyEmpWageList;
+    private Map<String, EmployeeWage> companyToEmpWageMap;
+
+
+    public EmpWageBuilderArray() {
+        companyEmpWageList = new LinkedList<>();
+        companyToEmpWageMap = new HashMap<>();
+
     }
 
-    private void addCompanyEmpWage(String companyName, int empRatePerHour, int numWorkingDays, int maxHoursPerMonth){
-        companyEmpWageArray[numOfCompany]=new EmployeeComputation(companyName,empRatePerHour,numWorkingDays,maxHoursPerMonth);
-        numOfCompany++;
+
+    public void addCompanyEmpWage(String companyName, int empRatePerHour, int numWorkingDays, int maxHoursPerMonth) {
+        EmployeeWage companyEmpWage = new EmployeeWage(companyName, empRatePerHour, numWorkingDays, maxHoursPerMonth);
+        companyEmpWageList.add(companyEmpWage);
+        companyToEmpWageMap.put(companyName, companyEmpWage);
+
     }
-    private void computeEmpWage(){
-        for (int i=0; i<numOfCompany; i++){
-            companyEmpWageArray[i].setTotalWage(this.computeEmpWage(companyEmpWageArray[i]));
-            System.out.println(companyEmpWageArray[i]);
+
+    public void computeEmpWage() {
+        for (int i = 0; i < companyEmpWageList.size(); i++) {
+
+            CompanyEmpWage companyEmpWage = companyEmpWageList.get(i);
+            companyEmpWage.setTotalWage(this.computeEmpWage(companyEmpWage));
+            System.out.println(companyEmpWage);
         }
     }
 
-    private int computeEmpWage(EmployeeComputation companyEmpWage) {
-        int empHour = 8;
-        int totalWorkingHours = 0;
-        int totalWorkingDays = 0;
+    @Override
+    public int getTotalWage(String companyName) {
 
-        while (totalWorkingHours <= companyEmpWage.maxHoursPerMonth && totalWorkingDays < companyEmpWage.numWorkingDays) {
-            totalWorkingDays++;
-            int randomCheck = (int) Math.floor((Math.random() * 10) % 3);
-            switch (randomCheck) {
-                case isPartTime:
-                    empHour = 4;
-                    System.out.println("Employee is Present for Half Day");
-                    break;
-                case isFullTime:
-                    empHour = 8;
-                    System.out.println("Employee is Present for Full Day");
-                    break;
-                default:
-                    empHour = 0;
+        return companyToEmpWageMap.get(companyName).totalWage;
 
-            }
-            totalWorkingHours += empHour;
-            System.out.println("Working Days: " + totalWorkingDays + "  Employee Hours: " + empHour);
-        }
 
-        return  totalWorkingHours*companyEmpWage.empRatePerHour;
+    }
+
+    public int computeEmpWage(CompanyEmpWage companyEmpWage) {
+
+
+        return 0;
     }
 
     public static void main(String[] args) {
         System.out.println("\nWelcome to Employee Wage Computation Program");
-        EmpWageBuilderArray emp=new EmpWageBuilderArray();
-        emp.addCompanyEmpWage("Relience",10,2,10);
-        emp.addCompanyEmpWage("Wipro",20,4,10);
-        emp.computeEmpWage();
-    }
+        ComputeEmpWage empWageBuilder = new EmpWageBuilderArray();
+        empWageBuilder.addCompanyEmpWage("Relience", 10, 2, 10);
+        empWageBuilder.addCompanyEmpWage("Wipro", 20, 4, 20);
+        empWageBuilder.computeEmpWage();
+        System.out.println("Total Wage for Relience Company:" + empWageBuilder.getTotalWage("Relience"));
+        System.out.println("Total Wage for Wipro Company:" + empWageBuilder.getTotalWage("Wipro"));
 
+    }
 }
